@@ -6,3 +6,7 @@ SHA256:dVE/YUh8xpQi72JEsx4um1NT8+CHDyK7cPk29pexCYA=
 
 
 Github pat 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
+
+
+sqp_44fd22533006e7e2b6038d1dea4a0dd1eb1aaff sonarqube token
+sqp_1790704d972fd04ec64f8415889fbb1053c53b63
