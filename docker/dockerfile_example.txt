@@ -1,0 +1,20 @@
+# Use an existing base image
+FROM ubuntu:20.04
+
+# Set environment variables
+ENV MY_VAR="Hello, Docker!"
+
+# Run a command inside the container
+RUN apt-get update && apt-get install -y some-package
+
+# Copy the "my-app" executable from your local system into the container
+COPY ./my-app /app/my-app
+
+# Set the working directory inside the container
+WORKDIR /app
+
+# Expose a port (for networking)
+EXPOSE 8080
+
+# Define the command to run when the container starts
+CMD ["./my-app"]

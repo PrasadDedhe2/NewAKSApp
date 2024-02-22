@@ -1,0 +1,87 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-sql-deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: nginx-sql
+  template:
+    metadata:
+      labels:
+        app: nginx-sql
+    spec:
+      containers:
+        - name: nginx-container
+          image: nginx:latest
+          ports:
+            - containerPort: 80
+        - name: html-container
+          image: nginx:latest  # Replace with your custom HTML image
+          ports:
+            - containerPort: 80
+          env:
+            - name: SQL_SERVER_HOST
+              value: sql-html-service  # Use the ClusterIP Service DNS name
+            - name: SQL_SERVER_PORT
+              value: "3306"  # Port for the SQL database
+        - name: sqldb-container
+          image: mysql:latest
+          envFrom:
+            - secretRef:
+                name: topsecret
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  minReadySeconds: 10
+
+
+
+
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-sql-lb-service
+spec:
+  selector:
+    app: nginx-sql
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+  type: LoadBalancer
+
+
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: sql-html-service
+spec:
+  selector:
+    matchLabels:
+      app: nginx-sql
+  ports:
+    - protocol: TCP
+      port: 3306       # Port for the SQL database
+      targetPort: 3306 # Port for the SQL database in the Pods
+    - protocol: TCP
+      port: 80         # Port for the HTML server
+      targetPort: 80   # Port for the HTML server in the Pods
+  type: ClusterIP
+
+
+
+apiVersion: v1
+kind: Secret
+metadata:
+  name: topsecret
+type: Opaque
+data:
+  username: <base64-encoded-username>
+  password: <base64-encoded-password>
+  database: <base64-encoded-database-name>
