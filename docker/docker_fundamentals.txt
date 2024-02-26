@@ -1,0 +1,95 @@
+docker is an enginer which allows us to containerize applications.
+docker helps to create multiple, light weighted containers.
+You can host docker on any linux environment
+You can pull the open source images (like nginx) from dockerhub repository
+docker image is a bluerpint while docker container is a runtime
+
+Docker container can be connected internally using different networks. (eg.Brige network)
+If you want to execute command inside a container you can you docker exec -id for the same
+For running a docker container you need to use docker run command
+For building an image you need to use docke build command
+docker ps -a gives information about the container
+docker stop -id stops the container
+docker rmi removes the image
+docker rm <id> removes the container
+docker images will tell you all images stored in the host
+docker logs <id> -> logs of the container
+docker inspect <id>  -> logs of the container
+docker ps <id>  -> logs of the container
+volume can be mounted on a container, so even if the container is destroyed then also data is stored
+docker run -v < hostpath>:<containerpath> <imagename>
+
+You can expose a certain port on your container as well
+docker run -p 443:80  <imagename> 
+
+Dockerfile.txt is the way to create a new imgae
+once you create this file, you need to build it. The code should reside at the same directory as the file
+
+Docker compose is nothing but if you want to build multiple images at once (for eg. an nginx server and the sql db) then you can dockercompose. 
+You need do dockercompose build and up
+
+the environment variable is something that you can define for change in property at runtime
+docker run  -e colour=red <imagename>
+
+docker login --.io
+docker run --.io/path
+
+docker run --name <> registry
+docker tag myimage localhost:5000
+docker push repository:tag
+
+
+
+
+
+FROM centos 20.01
+RUN yum install npm
+ENV colour=red
+WORKDIR /app
+COPY ./my-app /app/my-app
+EXPOSE 80
+CMD ["run my-app.py"]
+END
+
+FROM Ubuntu 20.04
+ENV colour=blue
+RUN apt-get install npm
+Copy ./myapp /app/myapp
+Workdir /app
+Expose 80
+CMD ["./myapp"]
+END
+
+
+dockercompose
+version:
+metadata:
+network: bridge
+services:
+	service1:
+		name:
+		ports:
+			-'80:443'
+		networks:
+			-mynetwork
+	service2:
+		name:
+		ports:
+			-'80:8080'
+		networks:
+			-mynetwork
+	networks:
+		mynetwork:
+			host
+			
+
+Bridge Network is by default network, which is created by docker, so that containers can talk to each other using just their IPs
+HOST Network is the network, in which containers can use their Host's network
+None network destroys all kind of networks a container has, it basically isolates it.
+
+
+Login/tag/push
+
+		
+	
+	
